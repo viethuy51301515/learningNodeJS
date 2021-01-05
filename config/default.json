@@ -1,0 +1,4 @@
+{
+  "mongoURI": "mongodb+srv://huy13000:huy123456@learningnodejs.jsohz.mongodb.net/testDB?retryWrites=true&w=majority",
+  "jwtToken": "mytoken"
+}
