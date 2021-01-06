@@ -5,6 +5,7 @@ const router = express.Router();
 const gravatar = require('gravatar');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const config = require('config')
 router.post(
   "/",
   [
@@ -64,8 +65,10 @@ router.post(
       // return jsonwebtoken
 
       console.log(req.body);
-      res.send("User route");
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+      res.status(500).send('server error')
+    }
   }
 );
 
