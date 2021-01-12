@@ -57,19 +57,41 @@ router.delete("/:id", auth, async (req, res) => {
         }
     }
 });
-router.put('/likes/:id',auth,async(req,res) => {
+
+router.put('/like/:id',auth,async(req,res) => {
   try {
     const post = await Post.findById(req.params.id).sort({date:-1});
 
     if(post.likes.filter(item => item.user.toString() === req.user.id).length !== 0){
-      return res.status(400).json({msg:"Post has not been liked yet"});
+      return res.status(400).json({msg:"Post has been liked yet"});
     }
 
     post.likes.unshift({user:req.user.id});
     await post.save();
     return res.json(post.likes);
   } catch (error) {
-    
+    res.status(500).json({msg:"server error"});
+  }
+});
+
+router.put('/unlike/:id',auth,async(req,res) => {
+  try {
+
+    const post = await Post.findById(req.params.id).sort({date:-1});
+
+    if(post.likes.filter(item => item.user.toString() === req.user.id).length === 0){
+      return res.status(400).json({msg:"Post has no been liked yet"});
+    }
+
+    const removeIndex = post.likes.map( (item) =>  item.user.toString()).indexOf(req.user.id);
+
+    post.likes.splice(removeIndex,1);
+
+    post.save();
+
+  } catch (error) {
+    res.status(500).json({msg:"server error"});
+
   }
 })
 module.exports = router;
